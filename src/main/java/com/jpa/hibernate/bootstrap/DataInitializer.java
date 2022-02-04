@@ -1,6 +1,8 @@
 package com.jpa.hibernate.bootstrap;
 
+import com.jpa.hibernate.domain.AuthorUuid;
 import com.jpa.hibernate.domain.Book;
+import com.jpa.hibernate.repositories.AuthorUuidRepository;
 import com.jpa.hibernate.repositories.BookRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -11,9 +13,11 @@ import org.springframework.stereotype.Component;
 public class DataInitializer implements CommandLineRunner {
 
     private final BookRepository bookRepository;
+    private final AuthorUuidRepository authorUuidRepository;
 
-    public DataInitializer(BookRepository bookRepository) {
+    public DataInitializer(BookRepository bookRepository, AuthorUuidRepository authorUuidRepository) {
         this.bookRepository = bookRepository;
+        this.authorUuidRepository = authorUuidRepository;
     }
 
     @Override
@@ -31,5 +35,11 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("Book Id: " + book.getId());
             System.out.println("Book Title: " + book.getTitle());
         });
+
+        AuthorUuid authorUuid = new AuthorUuid();
+        authorUuid.setFirstName("Joe");
+        authorUuid.setLastName("Buck");
+        AuthorUuid savedAuthor = authorUuidRepository.save(authorUuid);
+        System.out.println("Saved Author UUID: " + savedAuthor.getId());
     }
 }
